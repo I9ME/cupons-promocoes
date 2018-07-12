@@ -16,12 +16,16 @@
  */
 
 get_header(); ?>
-<main id="main" class="SiteMain" role="main">
-
-	<?php get_template_part('template-parts/page/intro','page');?>
-
+<div id="main" class="SiteMain SiteMain--inter" role="main">
+	<?php get_template_part('template-parts/page/intro','page'); ?>
 	
+	<main class="SiteMain-main u-marginTop--inter">
+	
+	<?php get_template_part('template-parts/page/section-page','content');?>
 
-</main><!-- #main -->
+
+	</main><!-- #main -->
+
+</div>
 
 <?php get_footer();
