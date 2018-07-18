@@ -299,7 +299,8 @@ class Custom_Post_Type_Image_Upload {
 	 * Register the custom post type
 	 */
 	public function init() {
-		
+	
+
 	// promocoes
 	$labels_promocoes = array(
 		"name" => __( "Promoções", "" ),
@@ -1214,82 +1215,82 @@ function coupon_metabox_callback( $post ) {
 	// Adiciona um campo para verificação posterior
 	wp_nonce_field( 'coupon_custom_metabox', 'coupon_custom_metabox_nonce' );
 	
-	$_id_promo = get_post_meta( $post->ID, '_id_promo', true );
-	$_titulo_promo = get_post_meta( $post->ID, '_titulo_promo', true );
+	$_id_promo      = get_post_meta( $post->ID, '_id_promo', true );
+	$_id_user       = get_post_meta( $post->ID, '_id_user', true );
+	$_titulo_promo  = get_post_meta( $post->ID, '_titulo_promo', true );
 	$_status_coupon = get_post_meta( $post->ID, '_status_coupon', true );
 
-
-	
-	
-	echo '<h4>PROMOÇÃO</h4>';
-?>
-
-<select id="promocao" style="width: 100%" name="promocao">
-                
-<?php 
-
-	$newsArgs = array( 'post_type' => 'promocoes', 'meta_key' => 'value_line_2', 'orderby' => 'meta_value_num', 'order' => 'ASC');
-	$newsLoop = new WP_Query( $newsArgs );
-			
-		if ( $newsLoop->have_posts() ):
-			 while ( $newsLoop->have_posts() ) : $newsLoop->the_post();
- ?>
-
-               
-        <option value="<?php echo get_the_ID(); ?>" <?php if( get_the_ID() == $_id_promo ) { echo 'selected'; } ?>>
-        	<?php echo get_the_title(); ?>  
-		</option>
-
-       <?php endwhile; ?>
-
-       <?php 
-			endif; 
-			wp_reset_postdata(); 
-		?>
-
-</select>
-
-<?php
-
-
-	echo '<h4>STATUS DO CUPOM</h4>';
-
 	?>
-
-
-<select style="width: 200px" name="_status_coupon">
-	<?php
-	// Generate all items of drop-down list
-	for ( $_status_coupon_opt = 4; $_status_coupon_opt >= 1; $_status_coupon_opt -- ) {
 		
-		switch ( $_status_coupon_opt ) {
-			case 1 : 
-				$titleOption = 'Cancelado';
-				break;
-			
-			case 2 : 
-				$titleOption = 'Expirado';
-				break;
 
-			case 3 : 
-				$titleOption = 'Utilizado';
-				break;
+		<div>
+			<?php $user_info = get_userdata($_id_user);
+				echo "<div style='border:1px solid #ccc;padding: 0 10px;background: #e4e4e4;'>";
+	      		echo '<h4>ID:    ' . $user_info->ID                   .'</h4>'."\n";
+	      		echo '<p>Nome:   ' . $user_info->user_firstname       .'</p>'. "\n";
+	      		echo '<p>E-mail: ' . $user_info->user_login           .'</p>'. "\n";
+	      		echo '<p>Tipo:   ' . implode(', ', $user_info->roles) .'</p>'. "\n";
+	      		echo "</div>"; 
+			?>
+		</div>
 
-			case 4 : 
-				$titleOption = 'Ativo';
-				break;
-		}
+		<?php echo '<h4>PROMOÇÃO</h4>'; ?> 
 
-	?>
-    <option value="<?php echo $_status_coupon_opt; ?>" <?php echo selected( $_status_coupon_opt, $_status_coupon ) ?>>
-    	<?php echo $titleOption; ?>  
-	</option>
-    <?php } ?>
-</select>
+		<select id="promocao" style="width: 100%" name="promocao">
+		                
+			<?php 
 
+				$newsArgs = array( 'post_type' => 'promocoes', 'meta_key' => 'value_line_2', 'orderby' => 'meta_value_num', 'order' => 'ASC');
+				
+				$newsLoop = new WP_Query( $newsArgs );
+						
+					if ( $newsLoop->have_posts() ): while ( $newsLoop->have_posts() ) : $newsLoop->the_post();
+					
+					?>
+			        <option value="<?php echo get_the_ID(); ?>" <?php if( get_the_ID() == $_id_promo ) { echo 'selected'; } ?>>
+			        	<?php echo get_the_title(); ?>  
+					</option>
 
-	<?php
+		       <?php endwhile; ?>
+
+		    <?php endif; wp_reset_postdata(); ?>
+		</select>
+
+		<?php echo '<h4>STATUS DO CUPOM</h4>'; ?>
+
+		<select style="width: 200px" name="_status_coupon">
+			<?php
+			// Generate all items of drop-down list
+			for ( $_status_coupon_opt = 4; $_status_coupon_opt >= 1; $_status_coupon_opt -- ) {
+				
+				switch ( $_status_coupon_opt ) {
+					case 1 : 
+						$titleOption = 'Cancelado';
+						break;
+					
+					case 2 : 
+						$titleOption = 'Expirado';
+						break;
+
+					case 3 : 
+						$titleOption = 'Utilizado';
+						break;
+
+					case 4 : 
+						$titleOption = 'Ativo';
+						break;
+				}
+
+			?>
+		    <option value="<?php echo $_status_coupon_opt; ?>" <?php echo selected( $_status_coupon_opt, $_status_coupon ) ?>>
+		    	<?php echo $titleOption; ?>  
+			</option>
+		    <?php } ?>
+		</select>
+
 	
+
+	<?php	
 }
 
 function coupon_save_custom_metabox_data( $post_id ) {
@@ -1316,6 +1317,8 @@ function coupon_save_custom_metabox_data( $post_id ) {
 	
 	$_id_promo = isset( $_POST['_id_promo'] ) ? $_POST['_id_promo'] : null;
 
+	$_id_user = isset( $_POST['_id_user'] ) ? $_POST['_id_user'] : null;
+
 	$_titulo_promo = isset( $_POST['_titulo_promo'] ) ? $_POST['_titulo_promo'] : null;
 
 	$_status_coupon = isset( $_POST['_status_coupon'] ) ? $_POST['_status_coupon'] : null;
@@ -1323,6 +1326,8 @@ function coupon_save_custom_metabox_data( $post_id ) {
 	// Atualiza os dados no BD
 	
 	update_post_meta( $post_id, '_id_promo', $_id_promo );
+
+	update_post_meta( $post_id, '_id_user', $_id_user );
 
 	update_post_meta( $post_id, '_titulo_promo', $_titulo_promo );
 
@@ -1335,7 +1340,7 @@ add_action( 'save_post', 'coupon_save_custom_metabox_data' );
 
 // Salva os cupons gerados por usuários
 
-function save_coupon_data( $code_coupon, $promocao_id, $promocao_title ) {
+function save_coupon_data( $code_coupon, $promocao_id, $user_id, $promocao_title ) {
 
 
        $args = array(
@@ -1348,8 +1353,85 @@ function save_coupon_data( $code_coupon, $promocao_id, $promocao_title ) {
        $post_id = wp_insert_post($args);
 
         update_post_meta($post_id, '_id_promo', $promocao_id);
+        update_post_meta($post_id, '_id_user', $user_id);
         update_post_meta($post_id, '_titulo_promo', $promocao_title);
         update_post_meta($post_id, '_status_coupon', 'ativo');
 
- }
+}
 
+
+// a simple WordPress frontend login implementation
+// written by Arūnas Liuiza | tinyStudio | wp.tribuna.lt
+// Usage: use [tiny_login] shortcode or get_tiny_login_form()/the_tiny_login_form() template tags
+// Arguments: one (optional) argument 'redirect': pass url where to redirect after successful login (default: false);
+// Localization: replace 'theme' with your text domain string.
+// login action hook - catches form submission and acts accordingly
+add_action('init','tiny_login');
+function tiny_login() {
+  global $tiny_error;
+  $tiny_error = false;
+  if (isset($_POST['username']) && isset($_POST['password'])) {
+    $creds = array();
+    $creds['user_login'] = $_POST['username'];
+    $creds['user_password'] = $_POST['password'];
+    //$creds['remember'] = false;
+    $user = wp_signon( $creds );
+    if ( is_wp_error($user) ) {
+      $tiny_error = $user->get_error_message();
+    } else {
+      if (isset($_POST['redirect']) && $_POST['redirect']) {
+        wp_redirect($_POST['redirect']);
+      }
+    }
+  }
+}
+
+// shows error message
+function the_tiny_error() {
+  echo get_tiny_error();
+}
+function get_tiny_error() {
+  global $tiny_error;
+  if ($tiny_error) {
+    $return = $tiny_error;
+    $tiny_error = false;
+    return $return;
+  } else {
+    return false;
+  }
+}
+// shows login form (or a message, if user already logged in)
+function get_tiny_login_form($redirect=false) {
+  if (!is_user_logged_in()) {
+    $return = "<form action=\"\" method=\"post\" class=\"tiny_form tiny_login\">\r\n";
+    $error = get_tiny_error();
+    if ($error)
+      $return .= "<p class=\"error\">{$error}</p>\r\n";
+    $return .= "  <p>
+      <label for=\"tiny_username\">".__('Username','theme')."</label>
+      <input type=\"text\" id=\"tiny_username\" name=\"username\" value=\"".(isset($_POST['username'])?$_POST['username']:"")."\"/>
+    </p>\r\n";
+    $return .= "  <p>
+      <label for=\"tiny_password\">".__('Password','theme')."</label>
+      <input type=\"password\" id=\"tiny_password\" name=\"password\"/>
+    </p>\r\n";
+    if ($redirect)
+      $return .= "  <input type=\"hidden\" name=\"redirect\" value=\"{$redirect}\">\r\n";
+    $return .= "  <button type=\"submit\">".__('Login','theme')."</button>\r\n";
+    $return .= "</form>\r\n";
+  } else {
+    $return = "<p>".__('User is already logged in','theme')."</p>";
+  }
+  return $return;
+}
+function the_tiny_login_form($redirect=false) {
+  echo get_tiny_login_form($redirect);
+}
+// adds a handy [tiny_login] shortcode to use in posts/pages
+add_shortcode('tiny_login','tiny_login_shortcode');
+function tiny_login_shortcode ($atts,$content=false) {
+  $atts = shortcode_atts(array(
+    'redirect' => false
+  ), $atts);
+  return get_tiny_login_form($atts['redirect']);
+}

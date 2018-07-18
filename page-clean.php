@@ -30,10 +30,11 @@
 	$url_get_ = explode('/cupom-gerado/', $url_get);
 	$id_promocao = $url_get_[1];
 	$title_promocao = get_the_title($id_promocao);
+	$user_id = get_current_user_id();
 
 	?>
 	
-	<?php save_coupon_data( $code_coupon, $id_promocao, $title_promocao ); ?>
+	<?php save_coupon_data( $code_coupon, $id_promocao, $user_id, $title_promocao ); ?>
 
 <section class="Section Section--style1 Section--couponData u-alignCenter">
 	<div id="renderPDF" class="u-positionRelative u-displayBlock">
