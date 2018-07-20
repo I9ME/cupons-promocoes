@@ -18,7 +18,51 @@
 		
 		}
 	
+	&-user{
+		top: 20px;
+		position: absolute;
+		right: $h_spacing;
+		transition: all .5s;
+	    flex-direction: column;
+		width: 11%;
+    	justify-content: space-between;
 
+		a{
+			display: flex;
+    		align-items: center;
+    		justify-content: space-between;
+			color: #feda00;
+
+			img{
+				width: 50px;
+    			height: 50px;
+    			border-radius: 38px;
+			}
+
+
+		}
+		&:hover{
+			transition: all .5s;
+			ul{
+				display: block;
+				margin-top: 4px;
+			    background: #383838;
+			    border: 2px solid #d3282d;
+			    padding: 14px;
+			    border-radius: 6px;
+			    box-shadow: 0 0 15px 1px #d3282d;
+
+				a{
+
+					color: #caad00;
+				}
+
+			}
+		}
+		ul{
+			display: none;
+		}
+	}
 
 
 	// ===================

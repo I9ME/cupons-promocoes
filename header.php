@@ -27,11 +27,7 @@
 
 <body <?php body_class(); ?>>
 
-<style type="text/css" media="screen">
-	.Site-header-user{
-		width: 10%;
-	}
-</style>
+
 	
 <div id="page" class="Site">
 	<header id="masthead" class="Site-header u-alignCenter u-positionAbsolute u-sizeFull u-displayFlex u-flexJustifyContentCenter is-animating u-zIndex20">
@@ -40,7 +36,7 @@
 		<div class="Site-header-branding u-displayInlineBlock u-positionRelative u-alignCenter"> 
 			<?php  get_template_part('template-parts/header/header','branding');?>
 		</div>
-		<div class="Site-header-user u-displayFlex u-positionRelative">
+		<div class="Site-header-user u-displayFlex ">
 			<?php  get_template_part('template-parts/header/header','user');?>
 		</div>
 		
